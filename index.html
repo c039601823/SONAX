@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>SONAX 專業自助洗車與雙重陶瓷鍍膜互動式施工指南 (SOP)</title>
+  <!-- Apple iOS Safari 加入主畫面全螢幕獨立 Web App 支援 -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="洗車鍍膜 SOP" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23141B29'/%3E%3Cstop offset='100%25' stop-color='%230B0F17'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' rx='40' fill='url(%23bg)'/%3E%3Crect x='20' y='20' width='140' height='140' rx='28' fill='none' stroke='%23FF5500' stroke-width='4'/%3E%3Ctext x='90' y='84' font-family='sans-serif' font-size='28' font-weight='bold' fill='%23FF5500' text-anchor='middle'%3ESONAX%3C/text%3E%3Ctext x='90' y='118' font-family='sans-serif' font-size='20' font-weight='bold' fill='%2338BDF8' text-anchor='middle'%3EDETAILING%3C/text%3E%3C/svg%3E" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Inter"', '"Noto Sans TC"', 'sans-serif'],
+          },
+          colors: {
+            studio: {
+              bg: '#0B0F17',
+              card: '#141B29',
+              border: '#232F46',
+            },
+            sonax: {
+              orange: '#FF5500',
+              ice: '#38BDF8',
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      background-color: #0B0F17;
+      color: #E2E8F0;
+      background-image: 
+        radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.09) 0%, transparent 45%),
+        radial-gradient(circle at 88% 12%, rgba(255, 85, 0, 0.08) 0%, transparent 42%);
+      background-attachment: fixed;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* 細膩毛玻璃卡片質感 */
+    .glass-panel {
+      background: rgba(20, 27, 41, 0.78);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* 平滑手風琴展開收合動畫 */
+    .accordion-content {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .accordion-content.open {
+      grid-template-rows: 1fr;
+    }
+    .accordion-inner {
+      overflow: hidden;
+    }
+
+    /* 工具互動膠囊標籤（確保 Mobile Safari 觸控流暢） */
+    .tool-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.2rem 0.6rem;
+      margin: 0.14rem 0.1rem;
+      border-radius: 0.55rem;
+      font-weight: 500;
+      font-size: 0.85rem;
+      line-height: 1.35;
+      cursor: pointer;
+      transition: transform 0.16s ease, filter 0.16s ease;
+      vertical-align: baseline;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .tool-chip:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.14);
+    }
+    .tool-chip:active {
+      transform: scale(0.96);
+    }
+
+    /* 彈出視窗：隱藏時嚴格設定 visibility: hidden 與 pointer-events: none，絕不阻擋頁面點擊 */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      background-color: rgba(5, 8, 14, 0.82);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.24s ease, visibility 0.24s ease;
+    }
+    .modal-backdrop.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+    .modal-card {
+      transform: translateY(14px) scale(0.96);
+      transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .modal-backdrop.active .modal-card {
+      transform: translateY(0) scale(1);
+    }
+
+    /* 自訂極簡捲軸 */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0B0F17;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #232F46;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="min-h-screen antialiased selection:bg-sky-500/30 selection:text-sky-200 pb-24">
+
+  <!-- 頂部置頂進度列 -->
+  <header class="sticky top-0 z-30 glass-panel border-b border-white/10">
+    <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5 shrink-0">
+        <span class="w-2.5 h-2.5 rounded-full bg-[#FF5500] shadow-[0_0_10px_#FF5500]"></span>
+        <span class="text-xs font-bold tracking-widest uppercase text-slate-200">SONAX STUDIO SOP</span>
+      </div>
+
+      <div class="flex items-center gap-3 flex-1 max-w-md justify-end">
+        <div class="flex-1 max-w-[140px] sm:max-w-[180px] bg-slate-900/90 h-2 rounded-full overflow-hidden border border-white/10">
+          <div id="progressBar" class="h-full bg-gradient-to-r from-[#38BDF8] via-blue-500 to-[#FF5500] transition-all duration-500 rounded-full" style="width: 0%"></div>
+        </div>
+        <span id="progressText" class="text-xs font-mono font-semibold text-slate-200 whitespace-nowrap">0 / 13 步驟已完成 (0%)</span>
+        <button id="resetProgressBtn" type="button" class="cursor-pointer px-2.5 py-1 rounded-lg text-xs font-medium bg-white/[0.06] hover:bg-white/[0.12] text-slate-300 border border-white/10 transition shrink-0">
+          重置進度
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-4 pt-7 sm:pt-10">
+
+    <!-- Hero 標題區 -->
+    <section class="mb-7">
+      <div class="flex flex-wrap items-center gap-2 mb-3">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FF5500]/15 border border-[#FF5500]/30 text-xs font-semibold text-orange-300">
+          SONAX SI-CARBON 雙重鍍膜
+        </span>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#38BDF8]/10 border border-[#38BDF8]/25 text-xs font-medium text-sky-300">
+          官方 01–12 步驟對照實戰版
+        </span>
+      </div>
+      <h1 class="text-2xl sm:text-4xl font-bold tracking-tight text-white leading-snug">
+        專業自助洗車與陶瓷鍍膜施工 SOP
+      </h1>
+      <p class="mt-2.5 text-sm sm:text-base text-slate-400 leading-relaxed">
+        點擊下方<span class="text-slate-200 font-medium">五大核心階段</span>可展開或收合詳細手順；點擊左側方塊可記錄進度；點擊任何<span class="text-sky-300 font-medium">工具／藥劑／布料膠囊標籤</span>，立即彈出實物示意圖與師傅操作重點。
+      </p>
+    </section>
+
+    <!-- 日常維護小瓶裝速查區（頁首快捷卡） -->
+    <section class="mb-6">
+      <div class="glass-panel rounded-2xl p-4 sm:p-5 border border-white/10 shadow-lg">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+            <h2 class="text-sm sm:text-base font-semibold text-white">日常維護小瓶裝與車內專用速查區</h2>
+          </div>
+          <span class="text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-400/20">
+            本次大保養不使用・留待日常維護
+          </span>
+        </div>
+        <p class="text-xs text-slate-400 leading-relaxed mb-3">
+          大保養需讓「陶瓷噴霧封體 (橘瓶)」直接抓牢裸漆打底；以下三款請留到未來日常泡沫洗車擦乾後或車內清潔使用（點擊可預覽說明）：
+        </p>
+        <div id="dailyQuickChips" class="flex flex-wrap gap-1.5"></div>
+      </div>
+    </section>
+
+    <!-- 布料與工具分組總覽（可摺疊戰備檢查表） -->
+    <section class="mb-6">
+      <div class="glass-panel rounded-2xl overflow-hidden border border-white/10 shadow-lg">
+        <button id="toggleGearBtn" type="button" class="cursor-pointer w-full px-5 py-4 flex items-center justify-between text-left hover:bg-white/[0.02] transition">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-sky-500/10 border border-sky-400/25 flex items-center justify-center text-sky-400 shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+              </svg>
+            </div>
+            <div>
+              <h2 class="text-sm sm:text-base font-semibold text-white">全套 20 件裝備分區總覽（戰備檢查表）</h2>
+              <p class="text-xs text-slate-400 mt-0.5">嚴格落實「收水布、玻璃布、4 條黃布」專布專用，絕不交叉污染</p>
+            </div>
+          </div>
+          <svg id="gearChevron" class="w-5 h-5 text-slate-400 transition-transform duration-300 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        <div id="gearAccordion" class="accordion-content">
+          <div class="accordion-inner">
+            <div class="px-5 pb-5 pt-2 border-t border-white/5 space-y-4">
+              <div>
+                <div class="text-xs font-semibold tracking-wider uppercase text-amber-400 mb-2">乾區擦拭布料（6 條嚴格分職）</div>
+                <div id="gearGroupCloths" class="flex flex-wrap gap-1.5"></div>
+              </div>
+              <div>
+                <div class="text-xs font-semibold tracking-wider uppercase text-orange-400 mb-2">SONAX 主力藥劑與海綿（9 件）</div>
+                <div id="gearGroupChemicals" class="flex flex-wrap gap-1.5"></div>
+              </div>
+              <div>
+                <div class="text-xs font-semibold tracking-wider uppercase text-sky-400 mb-2">Goddose 濕區清洗工具（4 件）</div>
+                <div id="gearGroupWet" class="flex flex-wrap gap-1.5"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 快捷操作列 -->
+    <div class="flex items-center justify-between mb-4 px-1">
+      <span class="text-xs font-medium text-slate-400">共 5 大階段・13 項標準施工步驟</span>
+      <button id="expandAllBtn" type="button" class="cursor-pointer text-xs text-[#38BDF8] hover:text-sky-300 font-semibold transition">
+        全部展開
+      </button>
+    </div>
+
+    <!-- 五大階段流程大項目容器 -->
+    <section id="phasesContainer" class="space-y-4"></section>
+
+  </main>
+
+  <!-- 工具實物圖解預覽彈窗 (Modal) -->
+  <div id="toolModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div id="modalCard" class="modal-card relative w-full max-w-md rounded-3xl bg-[#141B29] border border-white/15 shadow-2xl overflow-hidden">
+      
+      <!-- 右上角關閉按鈕 -->
+      <button id="closeModalBtn" type="button" aria-label="關閉預覽" class="cursor-pointer absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-slate-200 flex items-center justify-center transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <!-- 高精細 SVG 產品示意圖展示台 -->
+      <div class="relative h-56 w-full flex items-center justify-center overflow-hidden border-b border-white/10 bg-gradient-to-b from-slate-800/70 to-[#0B0F17]">
+        <div id="modalGlow" class="absolute w-44 h-44 rounded-full blur-3xl opacity-35"></div>
+        <div id="modalSvgContainer" class="relative z-10 w-44 h-44 flex items-center justify-center drop-shadow-[0_14px_24px_rgba(0,0,0,0.65)]"></div>
+      </div>
+
+      <!-- 工具規格與師傅指導 -->
+      <div class="p-6">
+        <div class="flex flex-wrap items-center gap-2 mb-2">
+          <span id="modalCategoryBadge" class="px-2.5 py-0.5 rounded-md text-xs font-semibold tracking-wide"></span>
+          <span id="modalSpecBadge" class="px-2.5 py-0.5 rounded-md text-xs font-medium bg-white/5 text-slate-300 border border-white/10"></span>
+        </div>
+
+        <h3 id="modalTitle" class="text-xl font-bold text-white leading-snug"></h3>
+        <p id="modalSubtitle" class="text-xs text-slate-400 mt-0.5 mb-4"></p>
+
+        <div class="space-y-3">
+          <div class="p-3.5 rounded-xl bg-white/[0.03] border border-white/5">
+            <div class="text-xs font-semibold text-[#38BDF8] uppercase tracking-wider mb-1">專屬施工任務</div>
+            <p id="modalTask" class="text-sm text-slate-200 leading-relaxed"></p>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-[#FF5500]/[0.08] border border-[#FF5500]/25">
+            <div class="text-xs font-semibold text-[#FF5500] uppercase tracking-wider mb-1">師傅關鍵注意事項</div>
+            <p id="modalCaution" class="text-sm text-slate-300 leading-relaxed"></p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    /**
+     * 完整 20 項工具與藥劑預覽資料庫（內建高精細向量 SVG 示意圖）
+     */
+    const TOOLS_DB = {
+      multistar: {
+        name: 'SONAX 萬用清潔劑 (500ml噴瓶)',
+        subtitle: 'SX Multistar 預洗與重污去污主力',
+        category: '清潔預洗藥劑',
+        spec: '500ml 噴瓶（可補充 1L 濃縮液）',
+        chipClass: 'bg-red-500/15 text-red-300 border border-red-400/30',
+        badgeClass: 'bg-red-500/20 text-red-300 border border-red-400/30',
+        glowColor: '#EF4444',
+        task: '用於獨立清潔四顆輪圈、輪胎壁，以及車頭蟲屍、側裙泥沙、格柵縫隙預洗軟化污垢。',
+        caution: '附註：廠商附贈的 1000ml SX Multistar 濃縮補充瓶可依比例稀釋倒入此 500ml 噴瓶重複使用！噴灑後靜置 1-2 分鐘即需沖水，嚴禁在陽光下曬乾。',
+        svg: `<svg viewBox="0 0 160 160" class="w-full h-full">
+          <rect x="64" y="16" width="32" height="14" rx="4" fill="#F8FAFC"/>
+          <path d="M52 22 L98 22 L94 34 L56 34 Z" fill="#E2E8F0"/>
+          <path d="M92 32 L106 46 L100 50 L86 35 Z" fill="#CBD5E1"/>
+          <path d="M58 42 L102 42 L112 72 L110 140 Q110 146 102 146 L58 146 Q50 146 50 140 L48 72 Z" fill="#DC2626"/>
+          <rect x="55" y="72" width="50" height="58" rx="6" fill="#1E293B"/>
+          <rect x="60" y="77" width="40" height="12" rx="2" fill="#EF4444"/>
+          <text x="80" y="86" font-size="8" font-weight="bold" fill="#FFF" text-anchor="middle">SONAX</text>
+          <text x="80" y="102" font-size="7" font-weight="bold" fill="#F8FAFC" text-anchor="middle">MULTISTAR</text>
+          <text x="80" y="114" font-size="6" fill="#94A3B8" text-anchor="middle">500ml 預洗清潔</text>
+        </svg>`
+      },
+      waterspot: {
+        name: 'SONAX 水漬去除劑 (黑瓶)',
+        subtitle: 'PROFILINE Waterspot Remover 1000ml',
+        category: '深層水垢去除',
+        spec: '1000ml 專業級黑瓶',
+        chipClass: 'bg-slate-400/15 text-slate-200 border border-slate-400/35',
+        badgeClass: 'bg-slate-400/20 text-slate-200 border border-slate-400/35',
+        glowColor: '#94A3B8',
+        task: '溶解車漆、鍍鉻窗框與飾條上洗不掉的頑固白點水斑與礦物質沉積水垢。',
+        caution: '局部施工專用！倒少量於圓形打蠟海綿輕抹患處，停留 30 秒至 1 分鐘內務必以大量清水徹底沖淨，絕不可乾掉在漆面上。',
+        svg: `<svg viewBox="0 0 160 160" class="w-full h-full">
+          <rect x="70" y="14" width="20" height="10" rx="3" fill="#F8FAFC"/>
+          <rect x="56" y="24" width="48" height="20" rx="6" fill="#1E293B"/>
+          <rect x="52" y="44" width="56" height="102" rx="10" fill="#0F172A" stroke="#334155" stroke-width="2"/>
+          <rect x="56" y="60" width="48" height="66" rx="4" fill="#1E293B"/>
+          <rect x="62" y="65" width="36" height="10" rx="2" fill="#EF4444"/>
+          <text x="80" y="73" font-size="7.5" font-weight="bold" fill="#FFF" text-anchor="middle">SONAX</text>
+          <text x="80" y="88" font-size="6.5" font-weight="bold" fill="#38BDF8" text-anchor="middle">WATERSPOT</text>
+          <text x="80" y="98" font-size="6.5" font-weight="bold" fill="#F8FAFC" text-anchor="middle">REMOVER</text>
+          <text x="80" y="114" font-size="6" fill="#94A3B8" text-anchor="middle">1000ml e</text>
+        </svg>`
+      },
+      glassPolish: {
+        name: 'SONAX 玻璃拋光劑 (銀灰瓶)',
+        subtitle: 'Glass Polish 氧化鋁微米研磨除油膜劑',
+        category: '玻璃物理除油膜',
+        spec: '銀灰瓶身・含微細研磨粒子',
+        chipClass: 'bg-zinc-400/15 text-zinc-200 border border-zinc-400/35',
+        badgeClass: 'bg-zinc-400/20 text-zinc-200 border border-zinc-400/35',
+        glowColor: '#CBD5E1',
+        task: '搭配白色方塊海綿，以物理研磨摩擦力徹底清除前擋、側窗與後擋的頑固油膜及老化撥水層。',
+        caution: '必須在「擦乾的玻璃」上起手，水分會降低研磨摩擦力！推到一半若太乾起白粉，僅需在海綿噴 1 下極細水霧潤滑即可；推完務必高壓沖水洗淨白粉。',
+        svg: `<svg viewBox="0 0 160 160" class="w-full h-full">
+          <path d="M72 16 L88 16 L92 32 L68 32 Z" fill="#F8FAFC"/>
+          <rect x="52" y="32" width="56" height="114" rx="12" fill="#64748B" stroke="#94A3B8" stroke-width="1.5"/>
+          <rect x="58" y="54" width="44" height="72" rx="5" fill="#0F172A"/>
+          <rect x="63" y="59" width="34" height="10" rx="2" fill="#EF4444"/>
+          <text x="80" y="67" font-size="7" font-weight="bold" fill="#FFF" text-anchor="middle">SONAX</text>
+          <text x="80" y="84" font-size="7" font-weight="bold" fill="#38BDF8" text-anchor="middle">GLASS</text>
+          <text x="80" y="95" font-size="7" font-weight="bold" fill="#F8FAFC" text-anchor="middle">POLISH</text>
+          <text x="80" y="112" font-size="5.8" fill="#94A3B8" text-anchor="middle">玻璃深層除油膜</text>
+        </svg>`
+      },
+      glassCoating: {
+        name: 'SONAX 陶瓷玻璃快速鍍膜 (紅瓶噴霧)',
+        subtitle: 'XTREME Ceramic Quick Glass Coating 2 in 1',
+        category: 'Si-Carbon 玻璃鍍膜',
+        spec: '紅瓶噴霧・二合一撥水鍍膜',
+        chipClass: 'bg-rose-500/15 text-rose-300 border border-rose-400/35',
+        badgeClass: 'bg-rose-500/20 text-rose-300 border border-rose-400/35',
+        glowColor: '#FB7185',
+        task: '在玻璃除油膜並徹底擦乾後施工，賦予全車玻璃與後視鏡強效碳矽撥水保護層，提升雨天視線。',
+        caution: '噴在折成四折的「深灰色纖維布」上塗抹（避免噴濺到剛洗淨的引擎蓋），靜待約 30 秒後翻至布的乾燥面擦亮至無霧影；完工後 1-2 小時內避免碰水。',
+        svg: `<svg viewBox="0 0 160 160" class="w-full h-full">
+          <rect x="64" y="16" width="32" height="14" rx="4" fill="#F8FAFC"/>
+          <path d="M52 22 L98 22 L94 34 L56 34 Z" fill="#E2E8F0"/>
+          <path d="M92 32 L106 46 L100 50 L86 35 Z" fill="#CBD5E1"/>
+          <path d="M58 42 L102 42 L112 74 L110 140 Q110 146 102 146 L58 146 Q50 146 50 140 L48 74 Z" fill="#E11D48"/>
+          <rect x="55" y="70" width="50" height="62" rx="6" fill="#0F172A"/>
+          <rect x="60" y="75" width="40" height="10" rx="2" fill="#EF4444"/>
+          <text x="80" y="83" font-size="7" font-weight="bold" fill="#FFF" text-anchor="middle">SONAX</text>
+          <text x="80" y="98" font-size="6" font-weight="bold" fill="#38BDF8" text-anchor="middle">CERAMIC GLASS</text>
+          <text x="80" y="109" font-size="6.5" font-weight="bold" fill="#F8FAFC" text-anchor="middle">COATING</text>
+          <text x="80" y="121" font-size="5.5" fill="#94A3B8" text-anchor="middle">SI-CARBON TECH</text>
+        </svg>`
+      },
+      ceramicSpray: {
+        name: 'SONAX 陶瓷噴霧封體 (橘瓶噴霧)',
+        subtitle: 'XTREME Ceramic Spray Versiegelung 碳矽封體',
+        category: '車漆主力鍍膜封體',
+        spec: '橘瓶噴霧・長效防護約 4 個月',
+        chipClass: 'bg-[#FF5500]/15 text-orange-300 border border-[#FF5500]/40',
+        badgeClass: 'bg-[#FF5500]/20 text-orange-300 border border-[#FF5500]/40',
+        glowColor: '#FF5500',
+        task: '全車收乾後作為車漆主防護層，形成高撥水、高增豔的碳矽陶瓷保護膜，並可順手擦拭輪框抗污。',
+        caution: '嚴格執行「單片鈑金推進」與「兩布法」：噴 2-3 下在黃布 2 號塗抹，不等乾燥立刻換全乾的黃布 3 號拋亮至零油影！完工後建議乾燥停放 2-4 小時固化。',
+        svg: `<svg viewBox="0 0 160 160" class="w-full h-full">
+          <rect x="64" y="16" width="32" height="14" rx="4" fill="#F8FAFC"/>
+          <path d="M52 22 L98 22 L94 34 L56 34 Z" fill="#E2E8F0"/>
+          <path d="M92 32 L106 46 L100 50 L86 35 Z" fill="#CBD5E1"/>
+          <path d="M58 42 L102 42 L112 74 L110 140 Q110 146 102 146 L58 146 Q50 146 50 140 L48 74 Z" fill="#FF5500"/>
+          <rect x="55" y="70" width="50" height="62" rx="6" fill="#0F172A"/>
+          <rect x="60" y="75" width="40" height="10" rx="2" fill="#EF4444"/>
+          <text x="80" y="83" font-size="7" font-weight="bold" fill="#FFF" text-anchor="middle">SONAX</text>
+          <text x="80" y="98" font-size="6.5" font-weight="bold" fill="#FB923C" text-anchor="middle">CERAMIC SPRAY</text>
+          <text x="80" y="109" font-size="6" font-weight="bold" fill="#F8FAFC" text-anchor="middle">VERSIEGELUNG</text>
+          <text x="80" y="121" font-size="5.5" fill="#38BDF8" text-anchor="middle">防護可達 4 個月</text>
+        </svg>`
+      },
+      bsdSmall: {
+        name: 'SONAX 亮光維護劑 BSD (小灰瓶)',
+        subtitle: 'XTREME Brilliant Shine Detailer 試用維護瓶',
+        category: '日常洗車維護補強',
+        spec: '小灰瓶裝・超強水珠張力',
+        chipClass: 'bg-slate-400/15 text-slate-200 border border-slate-400/35',
+        badgeClass: 'bg-slate-400/20 text-slate-200 border border-slate-400/35',
+        glowColor: '#94A3B8',
+        task: '未來日常泡沫洗車擦乾後全車噴擦一遍，修補耗損的撥水層，將橘瓶封體壽命延長至 3-4 個月。',
+        caution: '本次大保養請勿使用！讓橘瓶陶瓷噴霧封體直接抓牢裸漆效果最好，這瓶留待下次、下下次日常小洗車再拿出來用。',
+        svg: `<svg viewBox="0 0 160 160" class="w-full h-full">
+          <rect x="70" y="24" width="20" height="18" rx="4" fill="#F8FAFC"/>
+          <rect x="62" y="42" width="36" height="98" rx="8" fill="#64748B"/>
+          <rect x="65" y="60" width="30" height="66" rx="4" fill="#0F172A"/>
+          <rect x="68" y="64" width="24" height="8" rx="1.5" fill="#EF4444"/>
+          <text x="80" y="70" font-size="5.5" font-weight="bold" fill="#FFF" text-anchor="middle">SONAX</text>
+          <text x="80" y="86" font-size="6.5" font-weight="bold" fill="#38BDF8" text-anchor="middle">BRILLIANT</text>
+          <text x="80" y="96" font-size="6.5" font-weight="bold" fill="#F8FAFC" text-anchor="middle">SHINE</text>
+          <text x="80" y="106" font-size="5.5" fill="#94A3B8" text-anchor="middle">DETAILER</text>
+        </svg>`
+      },
+      waxSmall: {
+        name: 'SONAX 高速封體蠟 (小黃瓶)',
+        subtitle: 'High Speed Wax 含天然巴西棕櫚蠟',
+        category: '日常增豔滑度維護',
+        spec: '小黃瓶裝・溫潤深邃光澤',
+        chipClass: 'bg-yellow-400/15 text-yellow-300 border border-yellow-400/35',
+        badgeClass: 'bg-yellow-400/20 text-yellow-300 border border-yellow-400/35',
+        glowColor: '#FACC15',
+        task: '未來日常洗車後噴擦使用，賦予深色車漆極高滑度與厚實油亮的棕櫚蠟光澤，亦支援微濕施工。',
+        caution: '本次大保養請勿疊加使用，留到日後日常保養與小灰瓶 BSD 輪流使用即可。',
+        svg: `<svg viewBox="0 0 160 160" class="w-full h-full">
+          <rect x="70" y="24" width="20" height="18" rx="4" fill="#F8FAFC"/>
+          <rect x="62" y="42" width="36" height="98" rx="8" fill="#EAB308"/>
+          <rect x="65" y="60" width="30" height="66" rx="4" fill="#0F172A"/>
+          <rect x="68" y="64" width="24" height="8" rx="1.5" fill="#EF4444"/>
+          <text x="80" y="70" font-size="5.5" font-weight="bold" fill="#FFF" text-anchor="middle">SONAX</text>
+          <text x="80" y="88" font-size="6.5" font-weight="bold" fill="#FACC15" text-anchor="middle">HIGH SPEED</text>
+          <text x="80" y="99" font-size="7" font-weight="bold" fill="#F8FAFC" text-anchor="middle">WAX</text>
+          <text x="80" y="112" font-size="5.5" fill="#94A3B8" text-anchor="middle">棕櫚快速噴蠟</text>
+        </svg>`
+      },
+      goodyearGlass: {
+        name: '固特異玻璃清潔劑 (日常/車內專用)',
+        subtitle: 'Goodyear 玻璃快速去污清潔噴霧',
+        category: '車內玻璃與日常救急',
+        spec: '日常隨車清潔用品',
+        chipClass: 'bg-cyan-500/15 text-cyan-300 border border-cyan-400/30',
+        badgeClass: 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/30',
+        glowColor: '#22D3EE',
+        task: '專門用來擦拭「車內前擋與側窗玻璃」（消除夜間眩光），以及平時路邊局部清潔鳥屎與蟲屍。',
+        caution: '本次大保養無需使用！因為外玻璃已用 SONAX 玻璃拋光劑深層歸零，若先噴一般清潔劑反而可能干擾陶瓷玻璃鍍膜附著力。',
+        svg: `<svg viewBox="0 0 160 160" class="w-full h-full">
+          <rect x="66" y="18" width="28" height="14" rx="4" fill="#38BDF8"/>
+          <path d="M56 32 L104 32 L108 142 Q108 146 102 146 L58 146 Q52 146 52 142 Z" fill="#0284C7"/>
+          <rect x="58" y="62" width="44" height="64" rx="6" fill="#0F172A"/>
+          <text x="80" y="84" font-size="7.5" font-weight="bold" fill="#FACC15" text-anchor="middle">GOODYEAR</text>
+          <text x="80" y="99" font-size="7" font-weight="bold" fill="#F8FAFC" text-anchor="middle">玻璃清潔劑</text>
+          <text x="80" y="113" font-size="5.8" fill="#38BDF8" text-anchor="middle">車內玻璃 / 日常救急</text>
+        </svg>`
+      },
+      braidTowel: {
+        name: '60x90cm 灰色辮子布',
+        subtitle: 'Goddose 超大尺寸螺旋辮子絨吸水毛巾',
+        category: '主力純水收乾布',
+        spec: '60×90cm 大面積高吸水力',
+        chipClass: 'bg-sky-500/15 text-sky-300 border border-sky-400/35',
+        badgeClass: 'bg-sky-500/20 text-sky-300 border border-sky-400/35',
+        glowColor: '#38BDF8',
+        task: '負責「第二階段先擦乾所有玻璃」以及「第三階段全車鈑金大面積平鋪拖拉收水」。',
+        caution: '最高守則：此布一生只碰「洗淨後的純水」，絕對不可拿來擦拭任何鍍膜藥劑或打蠟，才能維持極致瞬吸力！',
+        svg: `<svg viewBox="0 0 160 160" class="w-full h-full">
+          <rect x="26" y="38" width="108" height="84" rx="14" fill="#475569" stroke="#94A3B8" stroke-width="2"/>
+          <path d="M34 48 L126 48 L126 112 L34 112 Z" fill="none" stroke="#64748B" stroke-width="2" stroke-dasharray="6 4"/>
+          <text x="80" y="76" font-size="11" font-weight="bold" fill="#F8FAFC" text-anchor="middle">60 × 90 cm</text>
+          <text x="80" y="93" font-size="8.5" font-weight="bold" fill="#38BDF8" text-anchor="middle">灰色辮子收水布</text>
+        </svg>`
+      },
+      yellowCloth1: {
+        name: '黃布 1 號（細節收水專用）',
+        subtitle: '超細纖維布 4 條組 — 第 1 條任務',
+        category: '乾區收水與雨刷清潔',
+        spec: '黃布 #1・專職水分與縫隙',
+        chipClass: 'bg-amber-400/15 text-amber-300 border border-amber-400/35',
+        badgeClass: 'bg-amber-400/20 text-amber-300 border border-amber-400/35',
+        glowColor: '#FBBF24',
+        task: '步驟 2.1 順向輕擦雨刷膠條黑灰色油泥；步驟 3.2 擦乾後照鏡、門把、水箱護罩與門檻縫隙殘水。',
+        caution: '此布專門對付「殘水與雨刷油泥」，擦濕後就不要再拿去擦車漆陶瓷封體，避免水分影響封體固化。',
+        svg: `<svg viewBox="0 0 160 160" class="w-full h-full">
+          <rect x="34" y="34" width="92" height="92" rx="16" fill="#FACC15" stroke="#FEF08A" stroke-width="2"/>
+          <rect x="42" y="42" width="76" height="76" rx="10" fill="#EAB308"/>
+          <circle cx="80" cy="68" r="14" fill="#0F172A"/>
+          <text x="80" y="73" font-size="13" font-weight="bold" fill="#FACC15" text-anchor="middle">#1</text>
+          <text x="80" y="100" font-size="8.5" font-weight="bold" fill="#0F172A" text-anchor="middle">細節收水 / 擦雨刷</text>
+        </svg>`
+      },
+      yellowCloth2: {
+        name: '黃布 2 號（車漆上藥塗抹專用）',
+        subtitle: '超細纖維布 4 條組 — 第 2 條任務',
+        category: '車漆封體「上藥布」',
+        spec: '黃布 #2・折四折塗抹封體',
+        chipClass: 'bg-amber-400/15 text-amber-300 border border-amber-400/35',
+        badgeClass: 'bg-amber-400/20 text-amber-300 border border-amber-400/35',
+        glowColor: '#FBBF24',
+        task: '折成四折，噴 2-3 下「陶瓷噴霧封體 (橘瓶)」均勻直線塗抹於單片鈑金；全車完工後順手擦拭四顆輪框。',
+        caution: '此布專職「帶藥劑塗抹」，布面會逐漸吸滿封體藥劑，千萬不可拿這條來做最後拋光收亮！',
+        svg: `<svg viewBox="0 0 160 160" class="w-full h-full">
+          <rect x="34" y="34" width="92" height="92" rx="16" fill="#FACC15" stroke="#FEF08A" stroke-width="2"/>
+          <rect x="42" y="42" width="76" height="76" rx="10" fill="#EAB308"/>
+          <circle cx="80" cy="68" r="14" fill="#FF5500"/>
+          <text x="80" y="73" font-size="13" font-weight="bold" fill="#FFF" text-anchor="middle">#2</text>
+          <text x="80" y="100" font-size="8.5" font-weight="bold" fill="#0F172A" text-anchor="middle">車漆封體上藥布</text>
+        </svg>`
+      },
+      yellowCloth3: {
+        name: '黃布 3 號（車漆二次拋亮專用）',
+        subtitle: '超細纖維布 4 條組 — 第 3 條任務',
+        category: '車漆封體「下蠟拋亮布」',
+        spec: '黃布 #3・保持全乾推亮',
+        chipClass: 'bg-amber-400/15 text-amber-300 border border-amber-400/35',
+        badgeClass: 'bg-amber-400/20 text-amber-300 border border-amber-400/35',
+        glowColor: '#FBBF24',
+        task: '左手握持全乾的黃布 3 號，在黃布 2 號剛塗抹完封體後「不等乾燥立刻接手推亮」，消除深色漆油影。',
+        caution: '施工中請勤勞翻面使用乾淨乾爽面；一旦整條布吸飽藥劑變微濕、擦拭產生阻力，立刻交棒給黃布 4 號！',
+        svg: `<svg viewBox="0 0 160 160" class="w-full h-full">
+          <rect x="34" y="34" width="92" height="92" rx="16" fill="#FACC15" stroke="#FEF08A" stroke-width="2"/>
+          <rect x="42" y="42" width="76" height="76" rx="10" fill="#EAB308"/>
+          <circle cx="80" cy="68" r="14" fill="#0284C7"/>
+          <text x="80" y="73" font-size="13" font-weight="bold" fill="#FFF" text-anchor="middle">#3</text>
+          <text x="80" y="100" font-size="8.5" font-weight="bold" fill="#0F172A" text-anchor="middle">二次拋光收亮布</text>
+        </svg>`
+      },
+      yellowCloth4: {
+        name: '黃布 4 號（備用收亮替補專用）',
+        subtitle: '超細纖維布 4 條組 — 第 4 條任務',
+        category: '車漆封體「備用拋亮布」',
+        spec: '黃布 #4・確保全車零油影',
+        chipClass: 'bg-amber-400/15 text-amber-300 border border-amber-400/35',
+        badgeClass: 'bg-amber-400/20 text-amber-300 border border-amber-400/35',
+        glowColor: '#FBBF24',
+        task: '當黃布 3 號拋亮到車身後半段開始微濕時，立刻接手負責剩餘鈑金與最後全車巡檢收亮。',
+        caution: '深色車漆最怕擦拭布飽和導致油影殘留，保留這條全新乾燥的 4 號布能讓全車後半段依然維持鏡面水準。',
+        svg: `<svg viewBox="0 0 160 160" class="w-full h-full">
+          <rect x="34" y="34" width="92" height="92" rx="16" fill="#FACC15" stroke="#FEF08A" stroke-width="2"/>
+          <rect x="42" y="42" width="76" height="76" rx="10" fill="#EAB308"/>
+          <circle cx="80" cy="68" r="14" fill="#059669"/>
+          <text x="80" y="73" font-size="13" font-weight="bold" fill="#FFF" text-anchor="middle">#4</text>
+          <text x="80" y="100" font-size="8.5" font-weight="bold" fill="#0F172A" text-anchor="middle">備用接力收亮布</text>
+        </svg>`
+      },
+      darkGreyCloth: {
+        name: '深灰色纖維布（玻璃鍍膜專用）',
+        subtitle: '玻璃鍍膜與雨刷防跳動收尾專用布',
+        category: '玻璃鍍膜獨立布料',
+        spec: '深灰色超細纖維布・不與車漆混用',
+        chipClass: 'bg-zinc-400/15 text-zinc-200 border border-zinc-400/35',
+        badgeClass: 'bg-zinc-400/20 text-zinc-200 border border-zinc-400/35',
+        glowColor: '#A1A1AA',
+        task: '折成四折噴塗「陶瓷玻璃快速鍍膜 (紅瓶)」，一面塗抹、靜待 30 秒翻另一乾面擦亮玻璃；最後輕帶雨刷膠條防跳動。',
+        caution: '玻璃鍍膜藥劑成分較澀且固化快，獨立使用這條深灰色布，絕不拿去擦拭車身烤漆。',
+        svg: `<svg viewBox="0 0 160 160" class="w-full h-full">
+          <rect x="34" y="34" width="92" height="92" rx="16" fill="#334155" stroke="#64748B" stroke-width="2"/>
+          <rect x="42" y="42" width="76" height="76" rx="10" fill="#1E293B"/>
+          <text x="80" y="74" font-size="10" font-weight="bold" fill="#38BDF8" text-anchor="middle">GLASS ONLY</text>
+          <text x="80" y="94" font-size="8.5" font-weight="bold" fill="#F8FAFC" text-anchor="middle">玻璃鍍膜專用布</text>
+        </svg>`
+      },
+      whiteBlockSponge: {
+        name: '白色方塊海綿（玻璃拋光專用）',
+        subtitle: '高密度紮實研磨施工海綿',
+        category: '玻璃除油膜耗材',
+        spec: '白色方塊海綿・搭配玻璃拋光劑',
+        chipClass: 'bg-slate-200/15 text-slate-100 border border-slate-300/35',
+        badgeClass: 'bg-slate-200/20 text-slate-100 border border-slate-300/35',
+        glowColor: '#E2E8F0',
+        task: '搭配「SONAX 玻璃拋光劑 (銀灰瓶)」，在乾玻璃上以井字型均勻施力推除頑固油膜。',
+        caution: '僅限用於玻璃表面！因為海綿已沾附氧化鋁研磨粒子，絕對不可拿來擦拭車身烤漆或鋼琴烤漆飾板。',
+        svg: `<svg viewBox="0 0 160 160" class="w-full h-full">
+          <rect x="38" y="44" width="84" height="62" rx="10" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
+          <rect x="38" y="96" width="84" height="14" rx="5" fill="#10B981"/>
+          <text x="80" y="74" font-size="9" font-weight="bold" fill="#0F172A" text-anchor="middle">玻璃拋光海綿</text>
+          <text x="80" y="88" font-size="7" fill="#475569" text-anchor="middle">井字型推除油膜</text>
+        </svg>`
+      },
+      tireBrush: {
+        name: 'Goddose 輪胎刷',
+        subtitle: '硬質弧形刷毛輪胎與輪拱清潔刷',
+        category: '輪圈起手工具',
+        spec: 'Goddose 9 件套・輪胎專用刷',
+        chipClass: 'bg-blue-500/15 text-blue-300 border border-blue-400/30',
+        badgeClass: 'bg-blue-500/20 text-blue-300 border border-blue-400/30',
+        glowColor: '#60A5FA',
+        task: '搭配萬用清潔劑，在第一階段獨立刷洗四顆輪胎橡膠壁與輪圈深處泥沙粉塵。',
+        caution: '刷毛較硬專門針對橡膠胎壁，請勿拿來刷洗亮面烤漆輪框或車身鈑金。',
+        svg: `<svg viewBox="0 0 160 160" class="w-full h-full">
+          <rect x="32" y="84" width="96" height="18" rx="8" fill="#334155"/>
+          <rect x="40" y="56" width="80" height="28" rx="4" fill="#38BDF8"/>
+          <path d="M48 56 L48 84 M60 56 L60 84 M72 56 L72 84 M84 56 L84 84 M96 56 L96 84 M108 56 L108 84" stroke="#0F172A" stroke-width="2"/>
+          <text x="80" y="122" font-size="9" font-weight="bold" fill="#F8FAFC" text-anchor="middle">Goddose 輪胎刷</text>
+        </svg>`
+      },
+      detailBrush: {
+        name: 'Goddose 細節刷',
+        subtitle: '軟毛縫隙與螺絲孔清潔刷',
+        category: '縫隙細節刷具',
+        spec: 'Goddose 9 件套・細節軟毛刷',
+        chipClass: 'bg-blue-500/15 text-blue-300 border border-blue-400/30',
+        badgeClass: 'bg-blue-500/20 text-blue-300 border border-blue-400/30',
+        glowColor: '#60A5FA',
+        task: '搭配萬用清潔劑，刷洗輪圈螺絲孔、卡鉗周邊、水箱護罩格柵、車標字體縫隙與窗框膠條。',
+        caution: '刷完輪圈螺絲孔後，務必先用高壓水柱把刷毛上的鐵粉砂粒沖乾淨，再拿去刷水箱護罩與車標。',
+        svg: `<svg viewBox="0 0 160 160" class="w-full h-full">
+          <rect x="73" y="58" width="14" height="76" rx="7" fill="#334155"/>
+          <rect x="71" y="50" width="18" height="12" rx="3" fill="#94A3B8"/>
+          <path d="M67 24 L93 24 L89 50 L71 50 Z" fill="#38BDF8"/>
+          <text x="80" y="148" font-size="8.5" font-weight="bold" fill="#F8FAFC" text-anchor="middle">Goddose 細節刷</text>
+        </svg>`
+      },
+      washMitt: {
+        name: 'Goddose 洗車手套',
+        subtitle: '高密度長毛絨車身上半部專用洗車手套',
+        category: '上半部正洗工具',
+        spec: 'Goddose 9 件套・車漆上半部專用',
+        chipClass: 'bg-sky-500/15 text-sky-300 border border-sky-400/30',
+        badgeClass: 'bg-sky-500/20 text-sky-300 border border-sky-400/30',
+        glowColor: '#38BDF8',
+        task: '沾滿中性洗車泡沫，以直線方式清洗「車頂 → 玻璃 → 引擎蓋 → 車身上半部」，包覆砂粒降低細紋。',
+        caution: '嚴格禁止用來洗輪框或車身最下緣側裙！保持手套潔淨才能避免深色車漆產生太陽紋。',
+        svg: `<svg viewBox="0 0 160 160" class="w-full h-full">
+          <rect x="46" y="32" width="68" height="82" rx="28" fill="#475569" stroke="#94A3B8" stroke-width="2"/>
+          <rect x="52" y="106" width="56" height="18" rx="6" fill="#1E293B"/>
+          <text x="80" y="76" font-size="9" font-weight="bold" fill="#F8FAFC" text-anchor="middle">洗車手套</text>
+          <text x="80" y="90" font-size="7" fill="#38BDF8" text-anchor="middle">上半部專用</text>
+        </svg>`
+      },
+      washSponge: {
+        name: 'Goddose 洗車海綿',
+        subtitle: '車身下半部與雨刷膠條泡沫清洗海綿',
+        category: '下半部與雨刷清洗',
+        spec: 'Goddose 9 件套・下半部專用',
+        chipClass: 'bg-sky-500/15 text-sky-300 border border-sky-400/30',
+        badgeClass: 'bg-sky-500/20 text-sky-300 border border-sky-400/30',
+        glowColor: '#38BDF8',
+        task: '沾滿泡沫清洗「車側下半部、前後保桿下緣、輪框表面」，並包覆立起的雨刷膠條輕抹 2-3 次洗去砂塵。',
+        caution: '清洗時若海綿不小心掉落地面，務必徹底沖洗確認無細砂再繼續使用。',
+        svg: `<svg viewBox="0 0 160 160" class="w-full h-full">
+          <rect x="34" y="46" width="92" height="58" rx="18" fill="#334155" stroke="#38BDF8" stroke-width="2"/>
+          <text x="80" y="74" font-size="9" font-weight="bold" fill="#F8FAFC" text-anchor="middle">洗車海綿</text>
+          <text x="80" y="88" font-size="7" fill="#94A3B8" text-anchor="middle">下半部 / 雨刷膠條</text>
+        </svg>`
+      },
+      roundWaxSponge: {
+        name: 'Goddose 圓形打蠟海綿',
+        subtitle: '細緻高密度圓形藥劑塗抹海綿',
+        category: '局部水垢塗抹耗材',
+        spec: 'Goddose 9 件套・圓形施工綿',
+        chipClass: 'bg-indigo-500/15 text-indigo-300 border border-indigo-400/30',
+        badgeClass: 'bg-indigo-500/20 text-indigo-300 border border-indigo-400/30',
+        glowColor: '#818CF8',
+        task: '步驟 2.3 搭配「SONAX 水漬去除劑 (黑瓶)」，局部輕抹引擎蓋、車頂或鍍鉻飾條上的頑固水斑。',
+        caution: '沾過水漬去除劑後請獨立收納或徹底洗淨，勿與其他車漆蠟品混用。',
+        svg: `<svg viewBox="0 0 160 160" class="w-full h-full">
+          <circle cx="80" cy="76" r="42" fill="#1E293B" stroke="#818CF8" stroke-width="3"/>
+          <circle cx="80" cy="76" r="32" fill="#334155"/>
+          <text x="80" y="74" font-size="8.5" font-weight="bold" fill="#F8FAFC" text-anchor="middle">圓形打蠟綿</text>
+          <text x="80" y="88" font-size="6.8" fill="#A5B4FC" text-anchor="middle">局部去水垢專用</text>
+        </svg>`
+      }
+    };
+
+    /**
+     * 完整五大階段施工步驟資料結構（共 13 個標準步驟）
+     */
+    const SOP_PHASES = [
+      {
+        id: 'phase-1',
+        number: '01',
+        officialBadge: '官方 01 ~ 08',
+        title: '第一階段：預洗與深層清潔（濕式作業）',
+        subtitle: '冷車立雨刷、輪圈獨立起手、全車預洗沖淨與上下分區泡沫正洗',
+        tag: '濕區清洗',
+        tagStyle: 'bg-sky-500/15 text-sky-300 border-sky-400/30',
+        accentColor: '#38BDF8',
+        principle: '先獨立清潔最髒的輪圈，避免同時噴車身導致預洗藥劑曬乾；上下半部洗車工具嚴格分開。',
+        steps: [
+          {
+            code: '1.1',
+            official: '官方 01',
+            title: '冷卻車身與立起雨刷',
+            desc: '引擎蓋散熱 <strong>5–10 分鐘</strong> 確認碟盤不燙手；將雨刷切至維修模式並<strong>立起</strong>（全程維持立起直到全車完工）。'
+          },
+          {
+            code: '1.2',
+            official: '官方 02',
+            title: '獨立清潔輪圈與輪胎（最髒起手式）',
+            desc: '使用 [[multistar]] 噴灑四顆輪圈與輪胎壁，靜置 <strong>1–2 分鐘</strong> 後以 [[tireBrush]] 與 [[detailBrush]] 刷洗胎壁、輪框內側與螺絲孔（避免同時噴車身導致藥劑曬乾）。'
+          },
+          {
+            code: '1.3',
+            official: '官方 03, 05',
+            title: '全車預洗軟化污垢與高壓沖淨',
+            desc: '將 [[multistar]] 噴灑車頭蟲屍、側裙泥沙與格柵，用 [[detailBrush]] 刷洗車標與縫隙（<strong>1–2 分鐘內勿乾掉</strong>），隨即高壓水柱由上往下連同輪圈徹底沖淨。'
+          },
+          {
+            code: '1.4',
+            official: '官方 06 ~ 08',
+            title: '全車泡沫正洗與雨刷膠條清潔',
+            desc: '全車噴灑泡沫，戴 [[washMitt]] 由上往下直線擦洗車頂、玻璃與車身上半部；換 [[washSponge]] 清洗下半部與輪框表面，並順手包覆雨刷膠條輕抹 <strong>2–3 次</strong> 洗去砂塵，最後高壓水柱徹底沖淨全車與雨刷。'
+          }
+        ]
+      },
+      {
+        id: 'phase-2',
+        number: '02',
+        officialBadge: '官方 10',
+        title: '第二階段：乾式玻璃除油膜 & 車漆局部去水垢',
+        subtitle: '先擦乾玻璃最大化研磨摩擦力・全車大收水前統一完成沖淨作業',
+        tag: '深層去污',
+        tagStyle: 'bg-zinc-400/15 text-zinc-200 border-zinc-400/30',
+        accentColor: '#A1A1AA',
+        principle: '玻璃拋光劑為物理研磨原理，水分會降低摩擦力，因此必須先將玻璃擦乾再施工，完成後統一沖淨。',
+        steps: [
+          {
+            code: '2.1',
+            official: '關鍵前置',
+            title: '擦乾全車玻璃與雨刷膠條',
+            desc: '使用 [[braidTowel]] 先只將所有玻璃徹底擦乾（確保乾玻璃起手以最大化研磨摩擦力）；再用 [[yellowCloth1]] 順向輕擦雨刷膠條擦除黑灰色油泥（勿死命用力搓傷石墨層），雨刷繼續保持立起。'
+          },
+          {
+            code: '2.2',
+            official: '官方 10',
+            title: '全車玻璃物理除油膜與徹底沖水',
+            desc: '搖勻 [[glassPolish]]，擠 10 元硬幣大小在乾燥的 [[whiteBlockSponge]] 上，在<strong>乾玻璃</strong>上分區「井字型」推磨（若中途變乾難推，海綿噴 1 下極細水霧即可），直到玻璃完全不排斥藥劑、呈均勻白膜；完成後立刻用高壓水柱徹底沖淨所有玻璃與周邊車漆。'
+          },
+          {
+            code: '2.3',
+            official: '局部深層',
+            title: '車漆局部水漬去除（視車況執行）',
+            desc: '檢查引擎蓋、車頂或鍍鉻飾條是否有頑固水斑；搖勻 [[waterspot]]，倒少量於 [[roundWaxSponge]] 局部輕抹，停留 <strong>30 秒至 1 分鐘</strong>（嚴禁乾掉），隨即以大量清水徹底沖淨。'
+          }
+        ]
+      },
+      {
+        id: 'phase-3',
+        number: '03',
+        officialBadge: '官方 11',
+        title: '第三階段：全車徹底收乾（乾濕分水嶺）',
+        subtitle: '進入乾式陶瓷鍍膜前，確保車身鈑金與縫隙 100% 乾燥無殘水',
+        tag: '全車收水',
+        tagStyle: 'bg-cyan-500/15 text-cyan-300 border-cyan-400/30',
+        accentColor: '#22D3EE',
+        principle: '接下來的陶瓷鍍膜遇水容易產生白霧斑或影響固化附著力，縫隙殘水務必徹底收乾。',
+        steps: [
+          {
+            code: '3.1',
+            official: '官方 11',
+            title: '大面積全車收水',
+            desc: '展開 [[braidTowel]]（只碰純水、絕不碰藥劑），平鋪於車頂與引擎蓋向後拖拉吸乾水分，再依序擦乾全車玻璃與車身側面。'
+          },
+          {
+            code: '3.2',
+            official: '官方 11',
+            title: '細節縫隙乾燥處理',
+            desc: '使用 [[yellowCloth1]] 擦乾後照鏡下方、門把縫隙、前後保桿接縫、水箱護罩、尾燈邊緣與四門門檻內側，確保 100% 無水痕流出。'
+          }
+        ]
+      },
+      {
+        id: 'phase-4',
+        number: '04',
+        officialBadge: '官方 12',
+        title: '第四階段：陶瓷玻璃鍍膜施工',
+        subtitle: '雨刷維持立起・先完成玻璃鍍膜，避免後續施工手摸髒車漆',
+        tag: '玻璃鍍膜',
+        tagStyle: 'bg-rose-500/15 text-rose-300 border-rose-400/30',
+        accentColor: '#FB7185',
+        principle: '玻璃全乾後施工，完工後不需再沖水，且 1–2 小時內保持乾燥勿開雨刷。',
+        steps: [
+          {
+            code: '4.1',
+            official: '官方 12',
+            title: '分區塗抹玻璃陶瓷鍍膜',
+            desc: '確認玻璃全乾後，將 [[glassCoating]] 噴在折成四折的 [[darkGreyCloth]] 上，分區（前擋分左右半邊）均勻塗抹全車玻璃與後視鏡。'
+          },
+          {
+            code: '4.2',
+            official: '官方 12',
+            title: '翻面擦亮與固化注意',
+            desc: '等待約 <strong>30 秒</strong> 藥劑微揮發後，將 [[darkGreyCloth]] 翻至乾淨乾燥面將玻璃擦至完全透亮無霧影（施工後 <strong>1–2 小時內</strong>避免碰水）。'
+          }
+        ]
+      },
+      {
+        id: 'phase-5',
+        number: '05',
+        officialBadge: '官方 12',
+        title: '第五階段：車漆陶瓷噴霧封體（兩布法拋亮）& 雨刷收尾',
+        subtitle: '汽美標準「一布上藥、一布拋亮」・單片鈑金推進，確保深色烤漆零油影',
+        tag: '車漆封體',
+        tagStyle: 'bg-[#FF5500]/15 text-orange-300 border-[#FF5500]/35',
+        accentColor: '#FF5500',
+        principle: '絕對不能一整台車噴完才擦！必須「一片鈑金塗抹完、立刻換全乾布拋亮」逐步推進。',
+        steps: [
+          {
+            code: '5.1',
+            official: '官方 12',
+            title: '兩布法分區上藥與立即拋光',
+            desc: '搖勻 [[ceramicSpray]]，以半片引擎蓋為單位，噴 2–3 下在 [[yellowCloth2]] 均勻直線塗抹；不等乾燥，立刻換全乾的 [[yellowCloth3]] 徹底推亮至零油影。若 3 號布微濕阻力變大，立刻換全新的 [[yellowCloth4]] 接手；最後用帶有餘劑的 [[yellowCloth2]] 順擦四顆輪框表面。'
+          },
+          {
+            code: '5.2',
+            official: '完工收尾',
+            title: '雨刷膠條防跳動處理與放下歸位',
+            desc: '確認前擋玻璃鍍膜已初步乾燥（約 <strong>15–20 分鐘</strong>不黏手）後，用剛擦過玻璃鍍膜的 [[darkGreyCloth]] 極輕地順滑帶過雨刷膠條表面增加潤滑度，再輕輕將雨刷放回玻璃上，全車完工！'
+          }
+        ]
+      }
+    ];
+
+    // 進度狀態管理（自動儲存至 localStorage）
+    const STORAGE_KEY = 'sonax_detailing_sop_progress_v3';
+    let completedSteps = new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'));
+
+    /**
+     * 將文字中的 [[toolKey]] 轉換為可點擊的高亮互動膠囊標籤
+     */
+    function parseToolTokens(text) {
+      return text.replace(/\[\[(\w+)\]\]/g, (match, key) => {
+        const tool = TOOLS_DB[key];
+        if (!tool) return key;
+        return `<button type="button" data-tool="${key}" class="tool-chip ${tool.chipClass}" title="點擊查看「${tool.name}」實物預覽圖">
+          <svg class="w-3.5 h-3.5 opacity-90 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+          <span>${tool.name}</span>
+        </button>`;
+      });
+    }
+
+    /**
+     * 渲染頁首日常維護速查區與 20 件裝備分區總覽
+     */
+    function renderQuickAndGearSections() {
+      const dailyKeys = ['bsdSmall', 'waxSmall', 'goodyearGlass'];
+      document.getElementById('dailyQuickChips').innerHTML = dailyKeys.map(k => parseToolTokens(`[[${k}]]`)).join('');
+
+      const cloths = ['braidTowel', 'yellowCloth1', 'yellowCloth2', 'yellowCloth3', 'yellowCloth4', 'darkGreyCloth'];
+      const chemicals = ['multistar', 'glassPolish', 'whiteBlockSponge', 'waterspot', 'roundWaxSponge', 'glassCoating', 'ceramicSpray'];
+      const wet = ['washMitt', 'washSponge', 'tireBrush', 'detailBrush'];
+
+      document.getElementById('gearGroupCloths').innerHTML = cloths.map(k => parseToolTokens(`[[${k}]]`)).join('');
+      document.getElementById('gearGroupChemicals').innerHTML = chemicals.map(k => parseToolTokens(`[[${k}]]`)).join('');
+      document.getElementById('gearGroupWet').innerHTML = wet.map(k => parseToolTokens(`[[${k}]]`)).join('');
+    }
+
+    /**
+     * 渲染五大階段手風琴卡片
+     */
+    function renderPhases(openPhaseIds = ['phase-1']) {
+      const container = document.getElementById('phasesContainer');
+      const openSet = new Set(openPhaseIds);
+
+      container.innerHTML = SOP_PHASES.map((phase) => {
+        const isOpen = openSet.has(phase.id);
+        const phaseStepCodes = phase.steps.map(s => s.code);
+        const doneCount = phaseStepCodes.filter(c => completedSteps.has(c)).length;
+        const isAllDone = doneCount === phaseStepCodes.length;
+
+        const stepsHtml = phase.steps.map(step => {
+          const checked = completedSteps.has(step.code);
+          return `
+            <div class="relative pl-11 pr-3.5 py-3.5 rounded-xl transition ${checked ? 'bg-emerald-500/[0.05] border border-emerald-500/20' : 'bg-white/[0.025] border border-white/5 hover:border-white/10'}">
+              <!-- 完成勾選按鈕 -->
+              <button type="button" data-step="${step.code}" aria-label="標記步驟 ${step.code} 完成"
+                class="cursor-pointer absolute left-3 top-3.5 w-6 h-6 rounded-lg flex items-center justify-center border transition ${checked ? 'bg-emerald-500 border-emerald-400 text-slate-950' : 'bg-slate-900/90 border-slate-600 text-transparent hover:border-[#38BDF8]'}">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </button>
+
+              <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                <span class="text-xs font-mono font-bold ${checked ? 'text-emerald-400' : 'text-[#38BDF8]'}">STEP ${step.code}</span>
+                <span class="px-1.5 py-0.5 rounded bg-white/[0.06] border border-white/10 text-[11px] font-medium text-slate-300">${step.official}</span>
+                <h4 class="text-sm sm:text-base font-semibold ${checked ? 'text-slate-400 line-through decoration-slate-600' : 'text-white'}">${step.title}</h4>
+              </div>
+              <p class="text-sm leading-relaxed ${checked ? 'text-slate-500' : 'text-slate-300'}">
+                ${parseToolTokens(step.desc)}
+              </p>
+            </div>
+          `;
+        }).join('');
+
+        return `
+          <article class="glass-panel rounded-2xl overflow-hidden shadow-xl transition border ${isAllDone ? 'border-emerald-500/35' : 'border-white/10'}">
+            <!-- 階段大項目標題列（點擊展開/收合） -->
+            <button type="button" data-phase="${phase.id}" class="cursor-pointer w-full p-4 sm:p-5 flex items-center justify-between gap-3 text-left hover:bg-white/[0.02] transition">
+              <div class="flex items-start sm:items-center gap-3.5">
+                <div class="w-11 h-11 rounded-2xl flex flex-col items-center justify-center shrink-0 font-mono font-bold border border-white/10 bg-[#0B0F17]" style="color: ${phase.accentColor}">
+                  <span class="text-[10px] text-slate-500 leading-none mb-0.5">STAGE</span>
+                  <span class="text-base leading-none">${phase.number}</span>
+                </div>
+                <div>
+                  <div class="flex flex-wrap items-center gap-2 mb-1">
+                    <span class="px-2 py-0.5 rounded text-[11px] font-semibold border ${phase.tagStyle}">${phase.tag}</span>
+                    <span class="px-2 py-0.5 rounded text-[11px] font-medium bg-white/[0.05] text-slate-300 border border-white/10">${phase.officialBadge}</span>
+                    <span class="text-xs font-mono ${isAllDone ? 'text-emerald-400 font-semibold' : 'text-slate-400'}">
+                      ${isAllDone ? '✓ 已完成' : `${doneCount}/${phaseStepCodes.length}`}
+                    </span>
+                  </div>
+                  <h3 class="text-base sm:text-lg font-bold text-white leading-snug">${phase.title}</h3>
+                  <p class="text-xs text-slate-400 mt-0.5 line-clamp-1">${phase.subtitle}</p>
+                </div>
+              </div>
+
+              <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center shrink-0 text-slate-400">
+                <svg id="chevron-${phase.id}" class="w-4 h-4 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </button>
+
+            <!-- 展開詳細步驟內容 -->
+            <div id="content-${phase.id}" class="accordion-content ${isOpen ? 'open' : ''}">
+              <div class="accordion-inner">
+                <div class="px-4 sm:px-5 pb-5 pt-1 border-t border-white/5 space-y-3">
+                  <div class="px-3.5 py-2.5 rounded-xl bg-white/[0.03] border-l-2 text-xs text-slate-300 leading-relaxed" style="border-left-color: ${phase.accentColor}">
+                    <span class="font-semibold text-white">核心原則：</span>${phase.principle}
+                  </div>
+                  <div class="space-y-2.5">
+                    ${stepsHtml}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    /**
+     * 更新頂部置頂進度列
+     */
+    function updateProgressUI() {
+      const total = SOP_PHASES.reduce((sum, p) => sum + p.steps.length, 0);
+      const done = completedSteps.size;
+      const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+      document.getElementById('progressBar').style.width = `${pct}%`;
+      document.getElementById('progressText').textContent = `${done} / ${total} 步驟已完成 (${pct}%)`;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify([...completedSteps]));
+    }
+
+    /**
+     * 取得目前所有展開中的階段 ID
+     */
+    function getCurrentlyOpenPhaseIds() {
+      return SOP_PHASES
+        .filter(p => {
+          const el = document.getElementById(`content-${p.id}`);
+          return el && el.classList.contains('open');
+        })
+        .map(p => p.id);
+    }
+
+    /**
+     * 開啟工具實物預覽彈窗
+     */
+    function openToolModal(toolKey) {
+      const tool = TOOLS_DB[toolKey];
+      if (!tool) return;
+
+      document.getElementById('modalSvgContainer').innerHTML = tool.svg;
+      document.getElementById('modalGlow').style.backgroundColor = tool.glowColor;
+
+      const catBadge = document.getElementById('modalCategoryBadge');
+      catBadge.className = `px-2.5 py-0.5 rounded-md text-xs font-semibold tracking-wide ${tool.badgeClass}`;
+      catBadge.textContent = tool.category;
+
+      document.getElementById('modalSpecBadge').textContent = tool.spec;
+      document.getElementById('modalTitle').textContent = tool.name;
+      document.getElementById('modalSubtitle').textContent = tool.subtitle;
+      document.getElementById('modalTask').textContent = tool.task;
+      document.getElementById('modalCaution').textContent = tool.caution;
+
+      const modal = document.getElementById('toolModal');
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    /**
+     * 關閉工具預覽彈窗
+     */
+    function closeToolModal() {
+      const modal = document.getElementById('toolModal');
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // 頁面初次渲染
+    renderQuickAndGearSections();
+    renderPhases(['phase-1']);
+    updateProgressUI();
+
+    // 全域事件委派（不使用任何 inline onclick）
+    document.addEventListener('click', (e) => {
+      // 1. 點擊任何工具/藥劑/布料膠囊標籤 -> 開啟預覽彈窗
+      const toolBtn = e.target.closest('[data-tool]');
+      if (toolBtn) {
+        e.stopPropagation();
+        openToolModal(toolBtn.getAttribute('data-tool'));
+        return;
+      }
+
+      // 2. 點擊步驟核取方塊 -> 切換完成進度
+      const stepBtn = e.target.closest('[data-step]');
+      if (stepBtn) {
+        e.stopPropagation();
+        const code = stepBtn.getAttribute('data-step');
+        if (completedSteps.has(code)) {
+          completedSteps.delete(code);
+        } else {
+          completedSteps.add(code);
+        }
+        const openIds = getCurrentlyOpenPhaseIds();
+        renderPhases(openIds);
+        updateProgressUI();
+        return;
+      }
+
+      // 3. 點擊五大階段大項目標題列 -> 展開或收合詳細手順
+      const phaseBtn = e.target.closest('[data-phase]');
+      if (phaseBtn) {
+        const phaseId = phaseBtn.getAttribute('data-phase');
+        const contentEl = document.getElementById(`content-${phaseId}`);
+        const chevronEl = document.getElementById(`chevron-${phaseId}`);
+        if (contentEl) contentEl.classList.toggle('open');
+        if (chevronEl) chevronEl.classList.toggle('rotate-180');
+        return;
+      }
+    });
+
+    // 戰備檢查表摺疊切換
+    document.getElementById('toggleGearBtn').addEventListener('click', () => {
+      document.getElementById('gearAccordion').classList.toggle('open');
+      document.getElementById('gearChevron').classList.toggle('rotate-180');
+    });
+
+    // 全部展開 / 收合切換
+    let allExpanded = false;
+    document.getElementById('expandAllBtn').addEventListener('click', (e) => {
+      allExpanded = !allExpanded;
+      SOP_PHASES.forEach(p => {
+        const contentEl = document.getElementById(`content-${p.id}`);
+        const chevronEl = document.getElementById(`chevron-${p.id}`);
+        if (allExpanded) {
+          contentEl.classList.add('open');
+          chevronEl.classList.add('rotate-180');
+        } else {
+          contentEl.classList.remove('open');
+          chevronEl.classList.remove('rotate-180');
+        }
+      });
+      e.target.textContent = allExpanded ? '全部收合' : '全部展開';
+    });
+
+    // 重置進度按鈕
+    document.getElementById('resetProgressBtn').addEventListener('click', () => {
+      completedSteps.clear();
+      const openIds = getCurrentlyOpenPhaseIds();
+      renderPhases(openIds);
+      updateProgressUI();
+    });
+
+    // 關閉彈窗事件（關閉鈕、點擊遮罩背景、ESC 鍵）
+    document.getElementById('closeModalBtn').addEventListener('click', closeToolModal);
+    document.getElementById('toolModal').addEventListener('click', (e) => {
+      if (e.target.id === 'toolModal') closeToolModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeToolModal();
+    });
+  </script>
+</body>
+</html>
